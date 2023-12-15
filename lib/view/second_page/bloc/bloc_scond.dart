@@ -17,4 +17,11 @@ class BlocSecondPage extends Bloc<CounterEvent, CounterState> {
   FutureOr<void> _onDecreadCounter(DecrementCounter event, Emitter<CounterState> emit) {
     emit(CounterUpdate(state.counter - 1));
   }
+
+  @override
+  void onChange(Change<CounterState> change){
+    super.onChange(change);
+    print(change);
+
+  }
 }

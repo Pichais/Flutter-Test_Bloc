@@ -4,6 +4,8 @@ import 'package:flutter_applicationtest/bloc/bloc_state.dart';
 import 'package:flutter_applicationtest/view/second_page/bloc/bloc_scond.dart';
 import 'package:flutter_applicationtest/view/second_page/bloc/bloc_scond_event.dart';
 import 'package:flutter_applicationtest/view/second_page/bloc/bloc_second_state.dart';
+import 'package:flutter_applicationtest/view/third_page/bloc/third_bloc.dart';
+import 'package:flutter_applicationtest/view/third_page/third_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SecondPage extends StatelessWidget {
@@ -87,11 +89,42 @@ class SecondPage extends StatelessWidget {
                   }
                 }),
                 // BlocSelector(selector: selector, builder: builder)
+                ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).push(_createRoute(context));
+                    },
+                    icon: const Icon(Icons.navigate_next_rounded),
+                    label: const Text('Go to Third Page'))
               ],
             );
           },
         ),
       ),
+    );
+  }
+
+  Route<Object?> _createRoute(BuildContext context) {
+
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const ThirdPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return BlocProvider(
+          create: (context) => ThirdPageBloc(),
+          child: GestureDetector(
+            onTap: (){
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            ),
+          ),
+        );
+      },
     );
   }
 }

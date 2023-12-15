@@ -90,7 +90,6 @@ class Blocs extends Bloc<BlocEvent, BlocState> {
 
       for (var elemet in updatedCategories) {
         if (elemet.id == event.id && quantity > 0) {
-          print('จำนวนคงเหลือ   ${elemet.quantity}');
           updatedCategories[index] = updatedCategories[index].copyWith(quantity: elemet.quantity - 1);
           final newCount = currentState.countCart + 1;
           emit(

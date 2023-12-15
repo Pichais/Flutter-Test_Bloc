@@ -1,0 +1,15 @@
+function doGet(request) {
+  var sheet = SpreadsheetApp.openById("17x4Gch6qaYss3FQakno3uqrFURiD0Hgx_pdxEEN_SSg");
+  var result = { "status": "SUCCESS" };
+
+  try {
+    var name = request.parameter.name;
+    var age = request.parameter.age;
+
+    var rowData = sheet.appendRow([name, age]);
+  } catch (err) { result = { "status": "FAILED", "message": err }; }
+
+  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+}
+
+
