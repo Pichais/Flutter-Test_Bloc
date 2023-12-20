@@ -130,6 +130,16 @@ class Blocs extends Bloc<BlocEvent, BlocState> {
       }
     }
   }
+
+  void testList (){
+   List<int?> numbers = [1, null, 3, null, 5];
+   if(numbers.any((item)=> item != null)){
+    print('element At ${numbers}');
+   }
+
+
+  }
+
 }
 
 

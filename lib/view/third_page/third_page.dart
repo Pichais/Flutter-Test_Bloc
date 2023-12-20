@@ -22,6 +22,7 @@ class ThirdPage extends StatelessWidget {
               children: [
                 Text('Name : ${state.name}'),
                  Text('Age :  ${state.age}'),
+                 
                 SizedBox(
                   width: 250,
                   child: TextFormField(

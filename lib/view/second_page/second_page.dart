@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_applicationtest/bloc/bloc_bloc.dart';
 import 'package:flutter_applicationtest/bloc/bloc_state.dart';
+import 'package:flutter_applicationtest/view/fourth_page/bloc/fb_bloc.dart';
+import 'package:flutter_applicationtest/view/fourth_page/bloc/fb_event.dart';
+import 'package:flutter_applicationtest/view/fourth_page/fourth_page.dart';
+import 'package:flutter_applicationtest/view/fourth_page/tab_storyandreels/story_cubit.dart';
 import 'package:flutter_applicationtest/view/second_page/bloc/bloc_scond.dart';
 import 'package:flutter_applicationtest/view/second_page/bloc/bloc_scond_event.dart';
 import 'package:flutter_applicationtest/view/second_page/bloc/bloc_second_state.dart';
@@ -94,7 +98,14 @@ class SecondPage extends StatelessWidget {
                       Navigator.of(context).push(_createRoute(context));
                     },
                     icon: const Icon(Icons.navigate_next_rounded),
-                    label: const Text('Go to Third Page'))
+                    label: const Text('Go to Third Page')),
+
+                ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).push(_createRouteFourthPage(context));
+                    },
+                    icon: const Icon(Icons.navigate_next_rounded),
+                    label: const Text('Go to Fourth Page')),
               ],
             );
           },
@@ -104,7 +115,6 @@ class SecondPage extends StatelessWidget {
   }
 
   Route<Object?> _createRoute(BuildContext context) {
-
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => const ThirdPage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -115,7 +125,39 @@ class SecondPage extends StatelessWidget {
         return BlocProvider(
           create: (context) => ThirdPageBloc(),
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Route<Object?> _createRouteFourthPage(BuildContext context) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const FourthPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => StoryCubit(),
+            ),
+            BlocProvider(
+              create: (context) => FbBloc()
+              ..add(LoadDataBloc()),
+            ),
+          ],
+          child: GestureDetector(
+            onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: SlideTransition(
