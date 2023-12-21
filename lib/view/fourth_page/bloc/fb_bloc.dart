@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_applicationtest/view/fourth_page/bloc/fb_event.dart';
 import 'package:flutter_applicationtest/view/fourth_page/bloc/fb_state.dart';
-import 'package:flutter_applicationtest/view/fourth_page/fb_model.dart';
+import 'package:flutter_applicationtest/DB/fb_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FbBloc extends Bloc<FbEventBloc, FbStateBloc> {
@@ -109,18 +109,19 @@ class FbBloc extends Bloc<FbEventBloc, FbStateBloc> {
     final currentState = (state as ReadyState);
     List<FacebookModel> updatelist = [];
 
-    for (var element in currentState.facebookModel) {
+
+    for (FacebookModel element in currentState.facebookModel) {
       if (element.id == event.id) {
+        // element.likepost = true;
         bool updatelike = !element.likepost;
         int updatetotallike = updatelike? element.totalLike +1 :  element.totalLike -1;
-
-
         updatelist.add(element.copyWith(likepost: updatelike, totalLike: updatetotallike));
-       
       } else {
         updatelist.add(element);
       }
     }
+
+     
 
     emit(ReadyState(facebookModel: updatelist));
   }

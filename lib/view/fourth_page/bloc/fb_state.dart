@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_applicationtest/view/fourth_page/fb_model.dart';
+import 'package:flutter_applicationtest/DB/fb_model.dart';
 
 abstract class FbStateBloc extends Equatable {
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_applicationtest/view/fourth_page/fb_model.dart';
+import 'package:flutter_applicationtest/DB/fb_model.dart';
 
 class HearderPost extends StatelessWidget {
  const  HearderPost({

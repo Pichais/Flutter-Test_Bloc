@@ -6,10 +6,7 @@ class ThirdPageState extends Equatable {
 
   const ThirdPageState({this.name = '', this.age = ''});
 
-  ThirdPageState copyWith({
-    String? name,
-    String? age,
-  }) {
+  ThirdPageState copyWith({String? name, String? age}) {
     return ThirdPageState(name: name ?? this.name, age: age ?? this.age);
   }
 

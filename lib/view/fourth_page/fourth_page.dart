@@ -15,26 +15,33 @@ class FourthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
     final selectedTab = context.select((StoryCubit cubit) => cubit.state.tab);
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'Facebook',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        actions: const [
-          Icon(Icons.add_circle_outline_rounded, size: 30),
-          SizedBox(width: 10),
-          Icon(Icons.search_rounded, size: 30),
-          SizedBox(width: 10),
-          Icon(Icons.account_circle_rounded, size: 30),
-          SizedBox(width: 10),
-        ],
-      ),
+        body: NestedScrollView(
+      floatHeaderSlivers: false,
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            title: const Text(
+              'Facebook',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            floating: true,
+            forceElevated: innerBoxIsScrolled,
+            actions: const [
+              Icon(Icons.add_circle_outline_rounded, size: 30),
+              SizedBox(width: 10),
+              Icon(Icons.search_rounded, size: 30),
+              SizedBox(width: 10),
+              Icon(Icons.account_circle_rounded, size: 30),
+              SizedBox(width: 10),
+            ],
+          ),
+        ];
+      },
       body: BlocBuilder<FbBloc, FbStateBloc>(
         builder: (context, state) {
           if (state is InitialState) {
@@ -70,7 +77,7 @@ class FourthPage extends StatelessWidget {
                   ),
                 ),
                 linearLine(),
-                StoryandReels(selectedTab: selectedTab, w: w, h: h),
+                StoryandReels(selectedTab: selectedTab, w: w, h: h, fbmodel: data),
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -106,9 +113,9 @@ class FourthPage extends StatelessWidget {
                                 children: [
                                   Row(
                                     children: [
-                                       Icon(
+                                      Icon(
                                         Icons.circle,
-                                        color: data[index].likepost? Colors.blue:null,
+                                        color: data[index].likepost ? Colors.blue : null,
                                       ),
                                       Text('${data[index].totalLike}'),
                                     ],
@@ -133,7 +140,7 @@ class FourthPage extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: linearLine(width: w * 0.9, height: 0.5),
                               ),
-                               EventLikeCommentShere(fbmodel: data[index])
+                              EventLikeCommentShere(fbmodel: data[index])
                             ],
                           ),
                         ),
@@ -147,7 +154,7 @@ class FourthPage extends StatelessWidget {
           );
         },
       ),
-    );
+    ));
   }
 
   Container linearLine({double? width, Color? color, double? height}) {

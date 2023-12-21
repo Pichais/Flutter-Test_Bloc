@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_applicationtest/DB/fb_model.dart';
 import 'package:flutter_applicationtest/view/fourth_page/tab_storyandreels/story_tab.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,11 +11,13 @@ class StoryandReels extends StatelessWidget {
     required this.selectedTab,
     required this.w,
     required this.h,
+    required this.fbmodel,
   });
 
   final StoryTab selectedTab;
   final double w;
   final double h;
+  final List<FacebookModel> fbmodel;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,7 @@ class StoryandReels extends StatelessWidget {
             ],
           ),
         ),
-        StoryAndReelsPost(w: w, h: h, groupValue: selectedTab),
+        StoryAndReelsPost(w: w, h: h, groupValue: selectedTab, fbmodel: fbmodel),
       ],
     );
   }
@@ -77,11 +80,13 @@ class StoryAndReelsPost extends StatelessWidget {
     required this.w,
     required this.h,
     required this.groupValue,
+    required this.fbmodel,
   });
 
   final double w;
   final double h;
   final StoryTab groupValue;
+  final List<FacebookModel> fbmodel;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +96,7 @@ class StoryAndReelsPost extends StatelessWidget {
       child: ListView.builder(
         padding: const EdgeInsets.only(left: 5),
         scrollDirection: Axis.horizontal,
-        itemCount: 8,
+        itemCount: fbmodel.length,
         itemBuilder: (context, index) {
           return Container(
               margin: const EdgeInsets.only(right: 5, bottom: 10),
@@ -102,6 +107,7 @@ class StoryAndReelsPost extends StatelessWidget {
                     height: h,
                     width: w,
                     decoration: BoxDecoration(
+                        // image: fbmodel[index].image != '' ?DecorationImage(image: AssetImage(fbmodel[index].image)): null,
                         borderRadius: BorderRadius.circular(8),
                         color: groupValue == StoryTab.story ? Colors.blue : Colors.red.shade400),
                   ),

@@ -3,6 +3,9 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter_applicationtest/bloc/bloc_bloc.dart';
 import 'package:flutter_applicationtest/bloc/bloc_event.dart';
 import 'package:flutter_applicationtest/view/second_page/second_page.dart';
+import 'package:flutter_applicationtest/view/todo_page/bloc/todo_bloc.dart';
+import 'package:flutter_applicationtest/view/todo_page/bloc/todo_event.dart';
+import 'package:flutter_applicationtest/view/todo_page/todo_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/bloc_state.dart';
@@ -41,7 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
               _shoppingCartBadge(state),
               IconButton(
                 onPressed: () {
-                  
                   Navigator.of(context).push(_createRoute());
                 },
                 icon: const Icon(Icons.arrow_forward),
@@ -72,9 +74,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(_createRoute());
+                        Navigator.of(context).push(_createRouteTodoPage());
                       },
-                      child: const Text('Go to Page 2'),
+                      child: const Text('Go to ToDoPage'),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.025,
@@ -124,6 +126,30 @@ class _MyHomePageState extends State<MyHomePage> {
         style: const TextStyle(color: Colors.white),
       ),
       child: IconButton(icon: const Icon(Icons.shopping_cart), onPressed: () {}),
+    );
+  }
+
+  Route _createRouteTodoPage() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const TodoPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return BlocProvider(
+          create: (context) => TodoBloc()..add(LoadingData()),
+          child: GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            ),
+          ),
+        );
+      },
     );
   }
 }
