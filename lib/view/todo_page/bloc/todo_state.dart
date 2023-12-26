@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_applicationtest/DB/todo_list_model.dart';
 
 class TodoState extends Equatable {
   @override
@@ -8,20 +9,24 @@ class TodoState extends Equatable {
 class InitailState extends TodoState {}
 
 class ReadyState extends TodoState {
-  final String tilename;
-  final String detail;
+  final List<TodoListModel> todoList;
 
-  ReadyState({this.tilename = '', this.detail = ''});
+  ReadyState({required this.todoList});
 
-  ReadyState copyWith({String? tilename, String? detail}) {
+  ReadyState copyWith({List<TodoListModel>? todoList}) {
     return ReadyState(
-      tilename: tilename ?? this.tilename,
-      detail: detail ?? this.detail,
+      todoList: todoList?? this.todoList
     );
   }
 
   @override
-  List<Object> get props => [tilename, detail];
+  List<Object> get props => [todoList];
 }
 
-class ErrorState extends TodoState {}
+class ErrorState extends TodoState {
+ final String massegeErr;
+  ErrorState({required  this.massegeErr});
+
+    @override
+  List<Object> get props => [massegeErr];
+}

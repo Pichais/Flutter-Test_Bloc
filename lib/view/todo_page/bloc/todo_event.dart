@@ -7,19 +7,12 @@ class TodoEvent extends Equatable {
 
 class LoadingData extends TodoEvent {}
 
-class SaveTitle extends TodoEvent {
-  final String titlename;
-  SaveTitle({required this.titlename});
 
-  @override
-  List<Object?> get props => [titlename];
-}
-
-class SaveDetail extends TodoEvent {
+class SaveDataTodo extends TodoEvent {
+    final String titlename;
   final String detail;
-  SaveDetail({required this.detail});
-  @override
-  List<Object?> get props => [detail];
-}
 
-class SaveDataTodo extends TodoEvent {}
+    SaveDataTodo({required this.detail,required this.titlename});
+  @override
+  List<Object?> get props => [titlename,detail];
+}

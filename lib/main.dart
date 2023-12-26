@@ -3,11 +3,9 @@ import 'package:flutter_applicationtest/bloc/bloc_bloc.dart';
 import 'package:flutter_applicationtest/view/mypage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,4 +25,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

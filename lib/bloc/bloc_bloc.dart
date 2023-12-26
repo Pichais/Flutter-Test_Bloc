@@ -72,11 +72,11 @@ class Blocs extends Bloc<BlocEvent, BlocState> {
 
     // if(Blocs.listStack.isNotEmpty)Blocs.listStack.clear();
 
-    categories.forEach(
-      (element) => Blocs.listStack.add(
+    for (var element in categories) {
+      Blocs.listStack.add(
         {'id': element.id, 'quantity': element.quantity},
-      ),
-    );
+      );
+    }
 
     emit(BlocFinish(countCart: 0, categories: categories));
   }
@@ -134,7 +134,6 @@ class Blocs extends Bloc<BlocEvent, BlocState> {
   void testList (){
    List<int?> numbers = [1, null, 3, null, 5];
    if(numbers.any((item)=> item != null)){
-    print('element At ${numbers}');
    }
 
 

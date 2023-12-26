@@ -13,7 +13,7 @@ class FacebookModel extends Equatable {
   final bool likepost;
   
 
-  FacebookModel({
+  const FacebookModel({
     required this.id,
     required this.titlename,
     required this.postWhen,

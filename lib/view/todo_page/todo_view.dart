@@ -4,9 +4,14 @@ import 'package:flutter_applicationtest/view/todo_page/bloc/todo_event.dart';
 import 'package:flutter_applicationtest/view/todo_page/bloc/todo_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TodoPage extends StatelessWidget {
+class TodoPage extends StatefulWidget {
   const TodoPage({super.key});
 
+  @override
+  State<TodoPage> createState() => _TodoPageState();
+}
+
+class _TodoPageState extends State<TodoPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -39,14 +44,14 @@ class TodoPage extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               } else if (state is ErrorState) {
-                return const Center(
-                  child: Text('Error state '),
+                return Center(
+                  child: Text('Error state => ${state.massegeErr}'),
                 );
               } else {
-                return  TabBarView(
+                return TabBarView(
                   children: [
                     ListToDo(state: (state as ReadyState)),
-                   const CreateToDo(),
+                    CreateToDo(),
                   ],
                 );
               }
@@ -62,19 +67,86 @@ class ListToDo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('${state.tilename}'),
-        Text('List To Do Emty !'),
-        Text('List To Do Emty !'),
-      ],
-    );
+    if (state.todoList.isNotEmpty) {
+      return ListView.builder(
+          itemCount: state.todoList.length,
+          itemBuilder: (context, index) {
+            return Stack(
+              children: [
+                Container(
+                    padding:
+                        const EdgeInsets.all(20.0), // Inner space to the child of the container
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Background color
+                      // borderRadius: BorderRadius.circular(20), // Rounded corners
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5), // Shadow color
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        // Add one or more stops here
+                        colors: [
+                          Colors.blue, // Start color
+                          Colors.orange.shade100 // End color
+                        ],
+                      ),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            state.todoList[index].titleName,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24, // Font size
+                              fontWeight: FontWeight.bold, // Font weight
+                            ),
+                          ),
+                          Text(
+                            state.todoList[index].detail,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24, // Font size
+                              fontWeight: FontWeight.bold, // Font weight
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Checkbox(
+                    hoverColor: Colors.amberAccent,
+                    value: false,
+                    onChanged: (value) {},
+                  ),
+                ),
+              ],
+            );
+          });
+    } else {
+      return const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('List To Do Emty !'),
+        ],
+      );
+    }
   }
 }
 
 class CreateToDo extends StatelessWidget {
-  const CreateToDo({super.key});
+  CreateToDo({super.key});
+
+  final TextEditingController ttt = TextEditingController();
+  final TextEditingController fff = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -92,15 +164,15 @@ class CreateToDo extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: TextFileCustom(
-              onChanged: (value) => context.read<TodoBloc>().add(SaveTitle(titlename: value)),
+              controller: ttt,
               tiltleHeard: 'TITLE :',
               titleTextFiled: '',
             ),
           ),
           TextFileCustom(
-            onChanged: (value) => context.read<TodoBloc>().add(SaveDetail(detail: value)),
+            controller: fff,
             maxLine: 5,
             tiltleHeard: 'DETAIL :',
             titleTextFiled: '',
@@ -108,7 +180,11 @@ class CreateToDo extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 40),
             child: ElevatedButton(
-              onPressed: () => context.read<TodoBloc>().add(SaveDataTodo()),
+              onPressed: () {
+                context.read<TodoBloc>().add(SaveDataTodo(titlename: ttt.text, detail: fff.text));
+                ttt.clear();
+                fff.clear();
+              },
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -130,13 +206,13 @@ class TextFileCustom extends StatelessWidget {
     this.maxLine,
     required this.tiltleHeard,
     required this.titleTextFiled,
-    required this.onChanged,
+    required this.controller,
   });
 
   final int? maxLine;
   final String tiltleHeard;
   final String titleTextFiled;
-  final Function(String) onChanged;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +235,7 @@ class TextFileCustom extends StatelessWidget {
                 topLeft: Radius.circular(30), bottomLeft: Radius.circular(30)),
           ),
           child: TextFormField(
-            onChanged: onChanged,
+            controller: controller,
             cursorColor: Colors.black,
             maxLines: maxLine,
             decoration: InputDecoration(
